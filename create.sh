@@ -5,20 +5,10 @@ source util.sh
 
 # CMD Line args: ./script clientName (wgInterface)
 if [ "$1" == '' ]; then
-	echo "USAGE: ./createQrClient.sh clientName [wginterface OPTIONAL]"
+	echo "USAGE: ./create.sh clientName [wginterface OPTIONAL]"
 	echo ""
 
-	echo "Already set-up clients (interface: client):"
-
-	#ls ${CONFKEYDIR}/*/*.conf
-	for iface in ${CONFKEYDIR}/*; do
-		ifaceName=$(basename "$iface")
-		for client in ${iface}/*.conf; do
-			client=$(basename "$client")
-			echo "	+ $ifaceName: ${client%.*}"
-		done
-	done
-
+	listSetUpClients
 	exit
 fi
 
@@ -81,7 +71,8 @@ else									# Client is new client
 fi
 
 # Create config file
-sudo tee ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf > /dev/null <<EOT
+CLIENTCONFFILE=${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
+sudo tee $CLIENTCONFFILE > /dev/null <<EOT
 [Interface]
 PrivateKey = ${PRIVKEY}
 Address = ${CLIENTIP}/32
@@ -94,9 +85,11 @@ Endpoint = ${SRVIP}:${ENDPOINTPORT}
 PersistentKeepalive = 25
 EOT
 
-qrencode -t ansiutf8 < ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
+qrencode -t ansiutf8 < $CLIENTCONFFILE
 
-echo "Client has pubkey: $PUBKEY and IP $CLIENTIP"
+#echo "Client has pubkey: $PUBKEY and IP $CLIENTIP"
+echo "The client's config file is saved on $CLIENTCONFFILE"
+echo "If your client is unable to scan QR codes, copy this file to their /etc/wireguard and execute 'wg-quick up ${CLIENTNAME}'"
 
 read -p "Authorize now on interface $interface? [Y/n] " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then

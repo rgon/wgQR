@@ -5,16 +5,15 @@ source util.sh
 
 # CMD Line args
 if [ "$1" == '' ]; then
-	echo "USAGE: ./deleteQrClient.sh clientName"
+	echo "USAGE: ./delete.sh clientName"
 	echo ""
-	echo "Already created keys:"
-	ls ${CONFKEYDIR} | grep .conf
+	
+	listSetUpClients
 	exit
 fi
 
 # Main
 CLIENTNAME=${1//.conf/}
-SRVPUBKEY=`cat publickey`
 
 if [ -f "${CONFKEYDIR}/${CLIENTNAME}.conf" ]; then
 	read -p "Delete keys for $CLIENTNAME? [Y/n] " -r

@@ -45,3 +45,15 @@ getInterface() {
 	interface=${WGINTERFACES[$i]}
 }
 
+listSetUpClients() {
+	echo "Already set-up clients (interface: client):"
+	
+	#ls ${CONFKEYDIR}/*/*.conf
+	for iface in ${CONFKEYDIR}/*/; do
+		ifaceName=$(basename "$iface")
+		for client in ${iface}/*.conf; do
+			client=$(basename "$client")
+			echo "	+ $ifaceName: ${client%.*}"
+		done
+	done
+}
