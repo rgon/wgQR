@@ -2,6 +2,15 @@
 ## Util functions for wgQR
 ###########################
 
+# Dependency checks:
+which qrencode 1> /dev/null
+if [ $? -ne 0 ]; then
+	echo "qrencode not installed! QR Code generation WILL NOT WORK"
+	echo "Please install it. Command for Ubuntu 21.04:"
+	echo "	sudo apt install qrencode" 
+	echo "------------------------ o ------------------------"
+fi
+
 # Find set-up interfaces
 ls /etc/wireguard/*.conf 1> /dev/null
 if [ $? -ne 0 ]; then
@@ -13,7 +22,7 @@ fi
 declare -a WGINTERFACES=()
 for iface in /etc/wireguard/*.conf; do
 	iface=$(basename "$iface")
-	echo "Found configured wg interface ${iface%.*}"
+	# echo "Found configured wg interface ${iface%.*}"
 	WGINTERFACES+=(${iface%.*})
 done
 
