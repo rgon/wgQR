@@ -1,6 +1,5 @@
 clients/
-publickey.secret
-srvip.secret
+*.secret
 *.key
 *.key.pub
 *.ip
