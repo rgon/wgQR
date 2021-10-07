@@ -13,7 +13,7 @@ fi
 declare -a WGINTERFACES=()
 for iface in /etc/wireguard/*.conf; do
 	iface=$(basename "$iface")
-	echo "Found interface ${iface%.*}"
+	echo "Found configured wg interface ${iface%.*}"
 	WGINTERFACES+=(${iface%.*})
 done
 
