@@ -8,19 +8,17 @@ if [ "$1" == '' ]; then
 	echo "USAGE: ./createQrClient.sh clientName [wginterface OPTIONAL]"
 	echo ""
 
-	echo "Already set-up clients (interface/client):"
+	echo "Already set-up clients (interface: client):"
 
+	#ls ${CONFKEYDIR}/*/*.conf
 	for iface in ${CONFKEYDIR}/*; do
 		ifaceName=$(basename "$iface")
-		if [ "$ifaceName" != "interfaces" ]; then
-			for client in ${iface}/*.conf; do
-				client=$(basename "$client")
-				echo "$ifaceName: ${client%.*}"
-			done
-		fi
+		for client in ${iface}/*.conf; do
+			client=$(basename "$client")
+			echo "	+ $ifaceName: ${client%.*}"
+		done
 	done
 
-	#ls ${CONFKEYDIR}/*/*.conf -I ${CONFKEYDIR}/interfaces
 	exit
 fi
 
@@ -29,24 +27,22 @@ if [ "$2" != '' ]; then
 		interface=$2
 		echo "Operating on interface $interface"
 	fi
-else
-#	echo "Clients set up on interface ${1}:"
-#	ls ${CONFKEYDIR}/${1} | grep .conf
 fi
 
 if [ ! -d ${CONFKEYDIR} ]; then
 	mkdir ${CONFKEYDIR}
 fi
-if [ ! -d ${CONFKEYDIR}/interfaces ]; then
-	mkdir ${CONFKEYDIR}/interfaces
-fi
 
 # Main
 CLIENTNAME=${1//.conf/}
-SRVPUBKEY=`cat publickey`
+
+if [ "$SRVPUBKEY" == "" ]; then
+	echo "Couldn't find the VPN server's public key. Please set SRVPUBKEY in ./util.sh or ensure the file it reads exists."
+	echo "Aborting."
+fi
 
 if [ -f "${CONFKEYDIR}/${CLIENTNAME}.key.pub" ]; then
-	echo "Key with such name exists. Not re-generating the key."
+	echo "Key for such client exists. Not re-generating the key."
 else
 	read -p "Will create client keys named $1. Continue? [Y/n] " -n 1 -r
         echo    # (optional) move to a new line
@@ -94,7 +90,7 @@ DNS = ${BASEIP}.1
 [Peer]
 PublicKey = $SRVPUBKEY
 AllowedIPs = ${BASEIP}.0/24
-Endpoint = ${WANIP}:${ENDPOINTPORT}
+Endpoint = ${SRVIP}:${ENDPOINTPORT}
 PersistentKeepalive = 25
 EOT
 
