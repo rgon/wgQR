@@ -1,7 +1,11 @@
 clients/
+publickey.secret
+srvip.secret
 *.key
 *.key.pub
 *.ip
+
+### Gedit ###
 *~
 
 ### VisualStudioCode ###
