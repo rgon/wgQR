@@ -11,8 +11,8 @@ It's designed for micro-scale VPNs and homelab-style use cases. The script shoul
 
 ## Configuration:
 This script requires the following variables to be set in `config.sh`:
-+ `SRVIP` with the server's public IP address
-+ `SRVPUBKEY` with the server's public key
++ `SRVIP` with the server's public IP address. By default, read from `./srvip.secret`.
++ `SRVPUBKEY` with the server's public key. By default, retreived from `/etc/wireguard/publickey`.
 
 ## Usage:
 This script assumes and depends on at least 1 existing wireguard interface with a [`wg-quick`](https://man7.org/linux/man-pages/man8/wg-quick.8.html) compatible config in `/etc/wireguard/yourinterface.conf`. You can create one just, for example using following [the tutorial on this repo](WG-QUICK_TUTORIAL.md).
