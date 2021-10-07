@@ -3,19 +3,35 @@
 source config.sh
 source util.sh
 
-# CMD Line args
+# CMD Line args: ./script clientName (wgInterface)
 if [ "$1" == '' ]; then
 	echo "USAGE: ./createQrClient.sh clientName [wginterface OPTIONAL]"
 	echo ""
-	echo "Already created keys:"
-	ls ${CONFKEYDIR} | grep .conf
+
+	echo "Already set-up clients (interface/client):"
+
+	for iface in ${CONFKEYDIR}/*; do
+		ifaceName=$(basename "$iface")
+		if [ "$ifaceName" != "interfaces" ]; then
+			for client in ${iface}/*.conf; do
+				client=$(basename "$client")
+				echo "$ifaceName: ${client%.*}"
+			done
+		fi
+	done
+
+	#ls ${CONFKEYDIR}/*/*.conf -I ${CONFKEYDIR}/interfaces
 	exit
 fi
+
 if [ "$2" != '' ]; then
 	if [ -f "/etc/wireguard/${2}.conf" ]; then
 		interface=$2
 		echo "Operating on interface $interface"
 	fi
+else
+#	echo "Clients set up on interface ${1}:"
+#	ls ${CONFKEYDIR}/${1} | grep .conf
 fi
 
 if [ ! -d ${CONFKEYDIR} ]; then
