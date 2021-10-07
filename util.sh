@@ -2,7 +2,14 @@
 ## Util functions for wgQR
 ###########################
 
-# Find set up interfaces
+# Find set-up interfaces
+ls /etc/wireguard/*.conf 1> /dev/null
+if [ $? -ne 0 ]; then
+	echo "Error listing wireguard interfaces on /etc/wireguard. Maybe a permission error? Please try again with sudo."
+	echo "Aborted."
+	exit
+fi
+
 declare -a WGINTERFACES=()
 for iface in /etc/wireguard/*.conf; do
 	iface=$(basename "$iface")
