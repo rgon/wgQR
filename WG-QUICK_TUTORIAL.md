@@ -31,7 +31,7 @@ ListenPort = 51820
 ```
 There is no need to set up clients here, `wgQR` will set them up for you.
 
-<details open>
+<details>
 <summary>Common config options</summary>
 <br>
 + *WG Interface subnet:* `Address = 10.0.0.1/24`. Clients connecting to this wireguard VPN will take the IPs: `10.0.0.2`, `10.0.0.3`, `10.0.0.21` etc. Make sure that your WAN interface is not in this same subnet, as every interface should be in a different subnet to make things easy. When creating more than 1 wireguard interface in the same server, make sure that every one of them is on a different subnet (eg. wgHomelab on `10.0.0.1/24`, wgProjects on `10.0.10.1/24`, wgHomelab on `10.0.3.1/24`). This way, every wireguard interface will have their clients isolated.
