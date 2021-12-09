@@ -60,7 +60,7 @@ if [ ! -d ${CONFKEYDIR}/$interface ]; then
 fi
 
 if [ -f "${CONFKEYDIR}/$interface/${CLIENTNAME}.conf" ]; then		# Client already created
-	CLIENTIP=$(cat ${CONFKEYDIR}/$interface/${CLIENTNAME}.conf | grep -oP '(?<=Address = )(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/\d{2}')
+	CLIENTIP=$(cat ${CONFKEYDIR}/$interface/${CLIENTNAME}.conf | grep -oP '(?<=Address = )(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
 	BASEIP=$(echo $CLIENTIP | cut -d "/" -f 1 | tr -d " " | rev | cut -d "." -f2- | rev)
 	echo "Peer already set up for interface. Using ip ${CLIENTIP}."
 else									# Client is new client
