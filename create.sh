@@ -29,6 +29,7 @@ CLIENTNAME=${1//.conf/}
 if [ "$SRVPUBKEY" == "" ]; then
 	echo "Couldn't find the VPN server's public key. Please set SRVPUBKEY in ./util.sh or ensure the file it reads exists."
 	echo "Aborting."
+	exit
 fi
 
 if [ -f "${CONFKEYDIR}/${CLIENTNAME}.key.pub" ]; then
