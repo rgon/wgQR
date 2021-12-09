@@ -58,8 +58,8 @@ if [ ! -d ${CONFKEYDIR}/$interface ]; then
 	mkdir ${CONFKEYDIR}/$interface
 fi
 
-if [ -f "${CONFKEYDIR}/$interface/${CLIENTNAME}.ip" ]; then		# Client already created
-	CLIENTIP=$(cat ${CONFKEYDIR}/$interface/${CLIENTNAME}.ip)
+if [ -f "${CONFKEYDIR}/$interface/${CLIENTNAME}.conf" ]; then		# Client already created
+	CLIENTIP=$(cat ${CONFKEYDIR}/$interface/${CLIENTNAME}.conf | grep -oP '(?<=Address = )(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/\d{2}')
 	BASEIP=$(echo $CLIENTIP | cut -d "/" -f 1 | tr -d " " | rev | cut -d "." -f2- | rev)
 	echo "Peer already set up for interface. Using ip ${CLIENTIP}."
 else									# Client is new client
@@ -67,7 +67,7 @@ else									# Client is new client
 	BASEIP=$(cat /etc/wireguard/${interface}.conf | grep Address | cut -d "=" -f 2 | cut -d "/" -f 1 | tr -d " " | rev | cut -d "." -f2- | rev)
 	CLIENTIP="${BASEIP}.${COUNTER}"
 	echo $((COUNTER+1)) > ${CONFKEYDIR}/${interface}/currentIpCounter.int
-	echo $CLIENTIP > ${CONFKEYDIR}/$interface/${CLIENTNAME}.ip
+	# echo $CLIENTIP > ${CONFKEYDIR}/$interface/${CLIENTNAME}.ip
 fi
 
 # Create config file
