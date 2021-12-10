@@ -10,16 +10,13 @@ if [ "$1" == '' ]; then
 	echo ""
 	
 	listSetUpClients
-fi
-
-if [ "$2" != '' ]; then
-	if [ -f "/etc/wireguard/${2}.conf" ]; then
-		interface=$2
+	echo ""
+	getInterface
+else
+	if [ -f "/etc/wireguard/${1}.conf" ]; then
+		interface=$1
 		echo "Operating on interface $interface"
 	fi
-else
-    # Ask the user
-	getInterface
 fi
 
 # Backup original file
@@ -46,12 +43,12 @@ read -p "Re-enroll cilents? This step is required if you need the clients to wor
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	for client in ${CONFKEYDIR}/${interface}/*.conf; do
 		clientConfFile=$(basename "$client")
-		CLIENTIP=$(cat ${clientConfFile} | grep -oP '(?<=Address = )(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
+		CLIENTIP=$(cat ${client} | grep -oP '(?<=Address = )(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
 		clientName=${clientConfFile%.*}
 		echo "Retrieving client pub key"
 
 		clientPubKey=$(cat ${CONFKEYDIR}/${clientName}.key.pub)
-		echo "Enrolling $clientName with $clientPubKey"
+		echo "Enrolling $clientName with $clientPubKey and IP $CLIENTIP"
 		sudo wg set $interface peer $clientPubKey allowed-ips $CLIENTIP/32
 	done
 fi
