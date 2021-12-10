@@ -57,3 +57,16 @@ listSetUpClients() {
 		done
 	done
 }
+
+enrollClient () {
+	interface="$1"
+	PUBKEY="$2"
+	CLIENTIP="$3"
+	if [ "$(cat /etc/wireguard/${interface}.conf | grep $PUBKEY)" == '' ]; then
+		sudo tee -a /etc/wireguard/${interface}.conf > /dev/null <<EOT
+[Peer]
+PublicKey = $PUBKEY
+AllowedIPs = ${CLIENTIP}/32
+EOT
+	fi
+}

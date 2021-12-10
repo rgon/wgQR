@@ -102,16 +102,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo ""
 	echo "Authorizing $CLIENTNAME."
 
-	if [ "$(cat /etc/wireguard/${interface}.conf | grep $PUBKEY)" == '' ]; then
-		sudo tee -a /etc/wireguard/${interface}.conf > /dev/null <<EOT
+	enrollClient $wginterface $PUBKEY $CLIENTIP
 
-[Peer]
-PublicKey = $PUBKEY
-AllowedIPs = ${CLIENTIP}/32
-EOT
-chmod 700 ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
-	
-	fi
+	chmod 700 ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
 
 	sudo wg set $interface peer $PUBKEY allowed-ips $CLIENTIP/32
 	echo "Granted access to $CLIENTNAME on $CLIENTIP"
