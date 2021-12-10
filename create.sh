@@ -108,4 +108,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 	sudo wg set $interface peer $PUBKEY allowed-ips $CLIENTIP/32
 	echo "Granted access to $CLIENTNAME on $CLIENTIP"
+
+	read -p "Restart wg service? Recommended, but will drop connections momentarily. [Y/n] " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		turnWgIfaceOnOff $interface restart
+	fi
 fi

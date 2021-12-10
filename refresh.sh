@@ -29,8 +29,7 @@ perl -0p -i -e 's/^\[Peer\][^\[]+//gms' "/etc/wireguard/${interface}.conf"
 read -p "Restart $interface? This WILL DROP any VPN connections. [Y/n] " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Restarting..."
-    ip link set $interface down
-    ip link set $interface up
+    turnWgIfaceOnOff $interface restart
     echo "Interface back up."
 else
     echo "Peer entries have been removed from the interface configuration file."

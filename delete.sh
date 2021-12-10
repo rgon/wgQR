@@ -37,6 +37,11 @@ if [ -f "${CONFKEYDIR}/${CLIENTNAME}.conf" ]; then
 			echo "Chosen interface not in range."
 		fi
 	done
+
+	read -p "Restart wg service? Recommended, but will drop connections momentarily. [Y/n] " -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		turnWgIfaceOnOff $interface restart
+	fi
 else
 	echo "Client key with that name doesn't exist"
 fi

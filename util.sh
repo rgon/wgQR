@@ -70,3 +70,18 @@ AllowedIPs = ${CLIENTIP}/32
 EOT
 	fi
 }
+
+turnWgIfaceOnOff () {
+	interface="$1"
+
+	if [ "$2" == "on" ] || [ "$2" == "true" ]; then
+    	#ip link set $interface up
+		sudo systemctl start wg-quick@${interface}.service
+	elif [ "$2" == "restart" ]; then
+		turnWgIfaceOnOff $1 off
+		turnWgIfaceOnOff $1 on
+	else
+		#ip link set $interface down
+		sudo systemctl stop wg-quick@${interface}.service
+	fi
+}
