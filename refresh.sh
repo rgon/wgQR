@@ -49,7 +49,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 		CLIENTIP=$(cat ${clientConfFile} | grep -oP '(?<=Address = )(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
 		clientName=${clientConfFile%.*}
 		echo "Retrieving client pub key"
-		clientPubKey=${CONFKEYDIR}/${clientName}.key.pub
+		clientPubKey=$(cat "${CONFKEYDIR}/${clientName}.key.pub")
 		echo "Enrolling $clientName"
 		sudo wg set $interface peer $clientPubKey allowed-ips $CLIENTIP/32
 	done
