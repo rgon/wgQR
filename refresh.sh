@@ -49,6 +49,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 		clientPubKey=$(cat ${CONFKEYDIR}/${clientName}.key.pub)
 		echo "Enrolling $clientName with $clientPubKey and IP $CLIENTIP"
+		enrollClient $interface $clientPubKey $CLIENTIP
 		sudo wg set $interface peer $clientPubKey allowed-ips $CLIENTIP/32
 	done
 fi

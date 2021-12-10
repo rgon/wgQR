@@ -102,9 +102,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo ""
 	echo "Authorizing $CLIENTNAME."
 
-	enrollClient $wginterface $PUBKEY $CLIENTIP
-
 	chmod 700 ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
+
+	enrollClient $wginterface $PUBKEY $CLIENTIP
 
 	sudo wg set $interface peer $PUBKEY allowed-ips $CLIENTIP/32
 	echo "Granted access to $CLIENTNAME on $CLIENTIP"
