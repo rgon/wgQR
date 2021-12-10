@@ -1,4 +1,4 @@
-# wgQR
+# wgQR: wg Quick enRoller
 wgQR is a Wireguard client configuration tool. It eases the enrollment of new clients on your private WG server and creates a QR code to enroll new mobile clients easily.
 
 > [`wg-quick`](WG-QUICK_TUTORIAL.md) lets you easily bring up new interfaces, `wgQR` makes enrolling clients on them a breeze
