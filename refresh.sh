@@ -10,7 +10,6 @@ if [ "$1" == '' ]; then
 	echo ""
 	
 	listSetUpClients
-	exit
 fi
 
 if [ "$2" != '' ]; then
