@@ -76,7 +76,7 @@ turnWgIfaceOnOff () {
 
 	if [ "$2" == "on" ] || [ "$2" == "true" ]; then
     	#ip link set $interface up
-		sudo wg-quick up $interface
+		#sudo wg-quick up $interface
 		sudo systemctl start wg-quick@${interface}.service
 	elif [ "$2" == "restart" ]; then
 		turnWgIfaceOnOff $1 off
