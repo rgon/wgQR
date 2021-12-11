@@ -5,6 +5,7 @@ A no-bs and easy-to-read guide on how to set up your own Wireguard VPN server. T
 Before continuing, install the required dependencies:
 + `sudo apt install wireguard`
 + `sudo apt install ufw` For simple firewall configuration. If this is the first time installing it, don't forget to enable your ssh port or any other you require for access! `sudo ufw allow ssh` Enable it with `sudo ufw enable`
++ `sudo sed -E -i 's/#net.ipv4.ip_forward=1|net.ipv4.ip_forward=0/net.ipv4.ip_forward=1/' /etc/sysctl.conf && sudo sysctl -p` enable routing
 
 ## Step 1: Server key pair generation
 This command will create a new key pair for your server, and these keys will be shared for all interfaces running on the same machine. They will uniquely identify this VPN server for your clients. 
@@ -28,6 +29,11 @@ Address = 10.0.0.1/24
 PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ListenPort = 51820
+```
+If you need inter-client communication, enable it as well:
+```
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; iptables -A FORWARD -i wg0 -o wg0 -j ACCEPT
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT
 ```
 There is no need to set up clients here, `wgQR` will set them up for you.
 
@@ -88,3 +94,13 @@ If a connection between both clients cannot be established, or only works on cer
 + *FIX:* add the following line to both client's `interface.conf` file: `PersistentKeepAlive = 25`
 + *WHAT IT DOES*: the client will ping the server every **25s**
 + *REASON:* the (stateful) router of which the client is in will drop the connection if no activity is detected for a certain period of time. For this reason, to keep the connection open so one client can reach anocher, a persistent ping every so often is performed.
+
+### Connection not working:
+If the interfaces go up correctly but no traffic flows, enable wireshark debugging on the server and check the logs `dmesg` when the client connects.
+```
+modprobe wireguard && echo module wireguard +p > /sys/kernel/debug/dynamic_debug/control
+```
+Also check if the key pairs are correct by generating the public key out of the private and comparing it to the value elsewhere:
+```
+echo {PRIVATEKEY} | wg pubkey
+```
