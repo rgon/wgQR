@@ -69,7 +69,7 @@ else									# Client is new client
 	COUNTER=`cat ${CONFKEYDIR}/${interface}/currentIpCounter.int 2>/dev/null || echo 2`
 	if [ "$COUNTER" == "" ]; 
 		COUNTER=2
-	elif ["$COUNTER" -lt 2];
+	elif [ "$COUNTER" -lt 2 ];
 		COUNTER=2
 	fi
 	BASEIP=$(cat /etc/wireguard/${interface}.conf | grep Address | cut -d "=" -f 2 | cut -d "/" -f 1 | tr -d " " | rev | cut -d "." -f2- | rev)
