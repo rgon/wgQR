@@ -105,11 +105,11 @@ echo "If your client is unable to scan QR codes, copy this file to their /etc/wi
 read -p "Authorize now on interface $interface? [Y/n] " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo ""
-	echo "Authorizing $CLIENTNAME with IP $CLIENTIP and pubkey $PUBKEY."
+	echo "Authorizing $CLIENTNAME with IP $CLIENTIP and pubkey $PUBKEY on $interface."
 
 	chmod 700 ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
 
-	enrollClient $wginterface $PUBKEY $CLIENTIP
+	enrollClient $interface $PUBKEY $CLIENTIP
 
 	sudo wg set $interface peer $PUBKEY allowed-ips $CLIENTIP/32
 	echo "Granted access to $CLIENTNAME on $CLIENTIP"
