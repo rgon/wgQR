@@ -78,7 +78,7 @@ else									# Client is new client
 		echo $((COUNTER+1)) > ${CONFKEYDIR}/${interface}/currentIpCounter.int
 	else
 		CLIENTIP="${BASEIP}.${SUBNETIP}"
-	else
+	fi
 fi
 
 # Create config file
