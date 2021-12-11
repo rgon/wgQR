@@ -5,7 +5,8 @@ source util.sh
 
 # CMD Line args: ./script clientName (wgInterface)
 if [ "$1" == '' ]; then
-	echo "USAGE: ./create.sh clientName [wginterface OPTIONAL]"
+	echo "USAGE: ./create.sh clientName [wginterface OPTIONAL] [subnetIP]"
+	echo "    enrolling clientNamefor example with the IP: 10.0.0.subnetIP"
 	echo ""
 
 	listSetUpClients
@@ -25,6 +26,7 @@ fi
 
 # Main
 CLIENTNAME=${1//.conf/}
+SUBNETIP=${3}
 
 if [ "$SRVPUBKEY" == "" ]; then
 	echo "Couldn't find the VPN server's public key. Please set SRVPUBKEY in ./util.sh or ensure the file it reads exists."
@@ -71,9 +73,12 @@ else									# Client is new client
 		COUNTER=2
 	fi
 	BASEIP=$(cat /etc/wireguard/${interface}.conf | grep Address | cut -d "=" -f 2 | cut -d "/" -f 1 | tr -d " " | rev | cut -d "." -f2- | rev)
-	CLIENTIP="${BASEIP}.${COUNTER}"
-	echo $((COUNTER+1)) > ${CONFKEYDIR}/${interface}/currentIpCounter.int
-	# echo $CLIENTIP > ${CONFKEYDIR}/$interface/${CLIENTNAME}.ip
+	if [ "$SUBNETIP" == "" ]; then
+		CLIENTIP="${BASEIP}.${COUNTER}"
+		echo $((COUNTER+1)) > ${CONFKEYDIR}/${interface}/currentIpCounter.int
+	else
+		CLIENTIP="${BASEIP}.${SUBNETIP}"
+	else
 fi
 
 # Create config file
