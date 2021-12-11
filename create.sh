@@ -105,7 +105,7 @@ echo "If your client is unable to scan QR codes, copy this file to their /etc/wi
 read -p "Authorize now on interface $interface? [Y/n] " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	echo ""
-	echo "Authorizing $CLIENTNAME."
+	echo "Authorizing $CLIENTNAME with IP $CLIENTIP and pubkey $PUBKEY."
 
 	chmod 700 ${CONFKEYDIR}/${interface}/${CLIENTNAME}.conf
 
