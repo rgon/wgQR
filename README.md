@@ -7,7 +7,7 @@ It's designed for micro-scale VPNs and homelab-style use cases. The script shoul
 
 ## Dependencies:
 + `qrencode` for in-terminal QR code generation. Recommended, makes setting up mobile devices as easy as scanning a QR code with the wireguard app.
-+ `wg` (oviously) and `wg-quick`
++ `wg` (obviously) and `wg-quick`
 
 ## Configuration:
 This script requires the following variables to be set in `config.sh`:
